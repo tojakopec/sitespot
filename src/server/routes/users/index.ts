@@ -8,6 +8,7 @@ import {
   // managerProfiles,
 } from "../../db/schema";
 import { eq } from "drizzle-orm";
+import { hashPassword } from "../../utils/passwordHash";
 
 const router = express.Router();
 
@@ -72,8 +73,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       .values({
         role,
         email,
-        // TODO: implement hashing util
-        passwordHash: password,
+        passwordHash: hashPassword(password),
         firstName,
         lastName,
         phone,
