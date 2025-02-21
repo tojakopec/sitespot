@@ -196,3 +196,18 @@ export const jobsRelations = relations(jobs, ({ one, many }) => ({
   applications: many(jobApplications),
   contract: one(contracts),
 }));
+
+export const schema = {
+  users,
+  workerProfiles,
+  companies,
+  workSites,
+  managerProfiles,
+  jobs,
+  jobApplications,
+  contracts,
+  reviews,
+  messages,
+  usersRelations,
+  jobsRelations,
+};
