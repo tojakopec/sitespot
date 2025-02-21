@@ -132,4 +132,25 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
+router.put("/reactivate/:id", async (req, res, next) => {
+  try {
+    const userId = Number(req.params.id);
+
+    const [reactivatedUser] = await db
+      .update(users)
+      .set({
+        isActive: true,
+      })
+      .where(eq(users.id, userId))
+      .returning();
+
+    if (!reactivatedUser) {
+      res.status(404).json({ error: "User not found." });
+    }
+    res.json({ message: "User reactivated successfully." });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

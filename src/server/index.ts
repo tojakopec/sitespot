@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import usersRouter from "./routes/users";
 
 dotenv.config();
 
@@ -9,10 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/api/v1/health", (req, res) => {
-  console.log(req);
-  res.json({ status: "healthy" });
-});
+app.use("/api/v1/users", usersRouter);
 
 const PORT = process.env.PORT ?? 3000;
 app.listen(PORT, () => {
