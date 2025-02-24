@@ -3,6 +3,7 @@ import { db } from "../../db";
 import { eq } from "drizzle-orm";
 import { companies } from "../../db/schema";
 import { checkUserExists } from "../../utils/userExists";
+import { users } from "../../db/schema";
 
 const router = express.Router();
 
@@ -40,32 +41,27 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.post(
-  "/",
-  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const {
-        userId,
-        companyName,
-        registrationNumber,
-        description,
-        websiteUrl,
-      } = req.body;
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId, companyName, registrationNumber, description, websiteUrl } =
+      req.body;
 
-      if (!userId || !companyName) {
-        res
-          .status(400)
-          .json({ error: "Required params: userId and companyName." });
-        return;
-      }
+    if (!userId || !companyName) {
+      res
+        .status(400)
+        .json({ error: "Required params: userId and companyName." });
+      return;
+    }
 
-      if (!(await checkUserExists(userId))) {
-        res.status(404).json({ error: "User not found." });
-        return;
-      }
+    if (!(await checkUserExists(userId))) {
+      res.status(404).json({ error: "User not found." });
+      return;
+    }
 
+    // Start a transaction to ensure both operations succeed or fail together
+    const result = await db.transaction(async (tx) => {
       // Create the company
-      const [newCompany] = await db
+      const [newCompany] = await tx
         .insert(companies)
         .values({
           userId,
@@ -76,23 +72,36 @@ router.post(
         })
         .returning();
 
-      res.status(201).json(newCompany);
-    } catch (error) {
-      next(error);
-    }
+      // Update the user's role
+      const [updatedUser] = await tx
+        .update(users)
+        .set({
+          role: "company",
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, userId))
+        .returning();
+
+      return { company: newCompany, user: updatedUser };
+    });
+
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
   }
-);
+});
 
 router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const companyId = Number(req.params.id);
 
-    const { companyName, registrationNumber, description, websiteUrl } =
+    const { userId, companyName, registrationNumber, description, websiteUrl } =
       req.body;
 
     const [updatedCompany] = await db
       .update(companies)
       .set({
+        userId,
         companyName,
         // TODO: Come back to change this in DB and here to:
         // 1. Employer Id Num (Ein)

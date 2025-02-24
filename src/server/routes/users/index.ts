@@ -6,11 +6,13 @@ import { eq } from "drizzle-orm";
 import { hashPassword } from "../../utils/passwordHash";
 import companiesRouter from "./companies";
 import workersRouter from "./workers";
+import managersRouter from "./managers";
 
 const router = express.Router();
 
 router.use("/companies", companiesRouter);
 router.use("/workers", workersRouter);
+router.use("/managers", managersRouter);
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {

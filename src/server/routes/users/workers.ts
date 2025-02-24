@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { db } from "../../db";
 import { eq } from "drizzle-orm";
-import { workerProfiles } from "../../db/schema";
+import { users, workerProfiles } from "../../db/schema";
 import { checkUserExists } from "../../utils/userExists";
 import { checkWorkerExists } from "../../utils/workerExists";
 
@@ -50,22 +50,32 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       return;
     }
 
-    const [newWorker] = await db
-      .insert(workerProfiles)
-      .values({
-        userId,
-        skills,
-        experience,
-        availability,
-        preferredLocation,
-        ratePerHour,
-        bio,
-        certifications,
-        isPublic,
-      })
-      .returning();
+    const result = await db.transaction(async (tx) => {
+      const [newWorker] = await tx
+        .insert(workerProfiles)
+        .values({
+          userId,
+          skills,
+          experience,
+          availability,
+          preferredLocation,
+          ratePerHour,
+          bio,
+          certifications,
+          isPublic,
+        })
+        .returning();
 
-    res.status(201).json(newWorker);
+      const [updatedUser] = await tx
+        .update(users)
+        .set({ role: "worker", updatedAt: new Date() })
+        .where(eq(users.id, userId))
+        .returning();
+
+      return { worker: newWorker, user: updatedUser };
+    });
+
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
@@ -142,8 +152,4 @@ router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 });
-
-// # Worker-specific endpoints
-// PUT    /workers/:id     # Update worker profile
-
 export default router;
