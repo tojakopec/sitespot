@@ -1,16 +1,16 @@
 import express from "express";
 import type { Response, Request, NextFunction } from "express";
 import { db } from "../../db";
-import {
-  users,
-  // workerProfiles,
-  // companies,
-  // managerProfiles,
-} from "../../db/schema";
+import { users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import { hashPassword } from "../../utils/passwordHash";
+import companiesRouter from "./companies";
+import workersRouter from "./workers";
 
 const router = express.Router();
+
+router.use("/companies", companiesRouter);
+router.use("/workers", workersRouter);
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
