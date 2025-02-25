@@ -2,8 +2,11 @@ import express, { Request, Response, NextFunction } from "express";
 import { jobs } from "../../db/schema";
 import { db } from "../../db";
 import { eq } from "drizzle-orm";
+import applicationsRouter from "./applications";
 
 const router = express.Router();
+
+router.use("/:id/applications", applicationsRouter);
 
 // POST   /                # Create new job
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
@@ -126,3 +129,5 @@ router.delete(
     }
   }
 );
+
+export default router;
