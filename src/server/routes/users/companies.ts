@@ -1,9 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import { db } from "../../db";
 import { eq } from "drizzle-orm";
-import { companies } from "../../db/schema";
+import { companies, users } from "../../db/schema";
 import { checkUserExists } from "../../utils/userExists";
-import { users } from "../../db/schema";
 
 const router = express.Router();
 
