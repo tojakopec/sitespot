@@ -26,7 +26,7 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
         passwordHash: false,
       },
     });
-    res.json(usersList);
+    res.status(200).json(usersList);
   } catch (error) {
     next(error);
   }
