@@ -181,20 +181,29 @@ export const messages = pgTable("messages", {
   readAt: timestamp("read_at"),
 });
 
-export const conversations = pgTable("conversations", {
-  id: serial("id").primaryKey(),
-  senderId: integer("sender_id")
-    .references(() => users.id)
-    .notNull(),
-  receiverId: integer("receiver_id")
-    .references(() => users.id)
-    .notNull(),
-  lastMessageAt: timestamp("last_message_at").defaultNow(),
-  lastMessage: text("last_message"),
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
+export const conversations = pgTable(
+  "conversations",
+  {
+    id: serial("id").primaryKey(),
+    participantOne: integer("sender_id")
+      .references(() => users.id)
+      .notNull(),
+    participantTwo: integer("receiver_id")
+      .references(() => users.id)
+      .notNull(),
+    lastMessageAt: timestamp("last_message_at").defaultNow(),
+    lastMessage: text("last_message"),
+    isActive: boolean("is_active").default(true),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [
+    check(
+      "unique_participants",
+      sql`${table.participantOne} < ${table.participantTwo}`
+    ),
+  ]
+);
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   workerProfile: one(workerProfiles, {
