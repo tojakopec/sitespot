@@ -109,7 +109,10 @@ router.post(
 // PUT user by id (update user)
 router.put(
   "/:id",
-  validateRequest({ body: updateUserSchema }),
+  validateRequest({
+    body: updateUserSchema,
+    params: idParamSchema.shape.params,
+  }),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = Number(req.params.id);
