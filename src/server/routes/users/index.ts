@@ -11,6 +11,7 @@ import { validateRequest } from "../../middleware/validateRequest";
 import { createUserSchema, updateUserSchema } from "../../validation/users";
 import { paginationSchema } from "../../validation/pagination";
 import { idParamSchema } from "../../validation/idParam";
+import { requireAuth, requireRole } from "../../middleware/requireAuth";
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.use("/managers", managersRouter);
 // GET all users (with pagination)
 router.get(
   "/",
+  requireAuth,
   validateRequest({ query: paginationSchema.shape.query }),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -43,6 +45,7 @@ router.get(
 // GET user by id
 router.get(
   "/:id",
+  requireAuth,
   validateRequest({ params: idParamSchema.shape.params }),
   async (
     req: Request<{ id: string }>,
@@ -109,6 +112,7 @@ router.post(
 // PUT user by id (update user)
 router.put(
   "/:id",
+  // TODO: Add requireOwner(?) so user can only be updated by that user
   validateRequest({
     body: updateUserSchema,
     params: idParamSchema.shape.params,
@@ -144,6 +148,7 @@ router.put(
 
 router.delete(
   "/:id",
+  requireRole(["admin"]),
   validateRequest({ params: idParamSchema.shape.params }),
   async (req, res, next) => {
     try {
@@ -168,6 +173,7 @@ router.delete(
 
 router.put(
   "/reactivate/:id",
+  requireRole(["admin"]),
   validateRequest({ params: idParamSchema.shape.params }),
   async (req, res, next) => {
     try {
