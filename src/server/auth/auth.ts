@@ -4,14 +4,17 @@ import { users } from "../db/schema";
 import { eq } from "drizzle-orm";
 import * as crypto from "node:crypto";
 import { hashPassword } from "../utils/passwordHash";
+import { loginLimiter } from "../middleware/rateLimiter";
+import { sessionConfig } from "../config/session";
 
 const router = express.Router();
 
 // LOGIN
 router.post(
   "/login",
+  loginLimiter,
   async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
     try {
       const user = await db.query.users.findFirst({
         where: eq(users.email, email),
@@ -42,6 +45,10 @@ router.post(
 
       req.session.userId = user.id;
       req.session.userRole = user.role;
+
+      if (rememberMe) {
+        req.session.cookie.maxAge = sessionConfig.extendedDuration;
+      }
 
       const { passwordHash, ...userWithoutPassword } = user;
       void passwordHash;

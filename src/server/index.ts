@@ -9,6 +9,7 @@ import sitesRouter from "./routes/sites";
 import jobsRouter from "./routes/jobs";
 import contractsRouter from "./routes/contracts";
 import authRouter from "./auth/auth";
+import { sessionConfig } from "./config/session";
 
 dotenv.config();
 
@@ -27,6 +28,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     secret: process.env.REDIS_SECRET!,
+    cookie: {
+      httpOnly: true,
+      maxAge: sessionConfig.defaultDuration,
+    },
   })
 );
 

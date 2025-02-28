@@ -22,7 +22,7 @@ Content-Type: application/json
 
 {
     "email": "rc@rc.com",
-    "password": "Password!1"
+    "password": "Password!1a"
 }
 
 ###
