@@ -8,7 +8,10 @@ import companiesRouter from "./companies";
 import workersRouter from "./workers";
 import managersRouter from "./managers";
 import { validateRequest } from "../../middleware/validateRequest";
-import { createUserSchema, updateUserSchema } from "../../validation/users";
+import {
+  createUserSchema,
+  updateUserSchema,
+} from "../../../shared/schemas/users";
 import { paginationSchema } from "../../validation/pagination";
 import { idParamSchema } from "../../validation/idParam";
 import { requireAuth, requireRole } from "../../middleware/requireAuth";
@@ -94,7 +97,7 @@ router.post(
         .values({
           role,
           email,
-          passwordHash: hashPassword(password),
+          passwordHash: await hashPassword(password),
           firstName,
           lastName,
           phone,

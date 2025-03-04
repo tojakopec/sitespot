@@ -1,11 +1,11 @@
-import * as crypto from "node:crypto";
+import bcrypt from "bcrypt";
 
-// hash user password with user's id and and a string as salt
-export function hashPassword(password: string) {
-  const saltString = "the night is dark and full of terrors";
+const SALT_ROUNDS = 10;
 
-  return crypto
-    .createHash("sha256")
-    .update(password + saltString)
-    .digest("hex");
+export async function hashPassword(password: string) {
+  return await bcrypt.hash(password, SALT_ROUNDS);
+}
+
+export async function verifyPassword(password: string, hash: string) {
+  return await bcrypt.compare(password, hash);
 }
