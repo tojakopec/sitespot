@@ -23,7 +23,7 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   lastLogin: timestamp("last_login"),
-  isActive: boolean("is_active").default(true),
+  isActive: boolean("is_active").default(false),
   avatarUrl: text("avatar_url"),
 });
 
