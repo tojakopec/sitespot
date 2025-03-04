@@ -26,7 +26,10 @@
     "paths": {
       "@/*": ["./src/*"],
       "@client/*": ["./src/client/*"],
-      "@server/*": ["./src/server/*"]
+      "@server/*": ["./src/server/*"],
+
+      "@shared/*": ["./src/shared/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src/client/**/*", "src/vite-env.d.ts"]
