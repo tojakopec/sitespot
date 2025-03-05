@@ -31,7 +31,7 @@ const FormInputField = forwardRef<HTMLInputElement, FormInputFieldProps>(
       <div className="flex flex-col gap-2 mb-4">
         <label
           htmlFor={name}
-          className="block text-2xl font-medium text-gray-700"
+          className="block text-2xl font-medium text-gray-200"
         >
           {title} {required && <span className="text-red-500">*</span>}
         </label>
@@ -49,7 +49,7 @@ const FormInputField = forwardRef<HTMLInputElement, FormInputFieldProps>(
           } ${type === "checkbox" ? "w-4 h-4" : ""}`}
           {...rest}
         />
-        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>
     );
   }

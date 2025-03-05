@@ -15,8 +15,8 @@ export default function RequirementsChecklist({
 }: Readonly<RequirementsChecklistProps>) {
   return (
     <div className="text-md space-y-1 mt-2">
-      <p className="font-medium text-gray-700">Password requirements:</p>
-      <ul className="pl-5 space-y-1">
+      <p className="font-medium text-gray-200">Password requirements:</p>
+      <ul className="pl-5 mx-auto space-y-1">
         <li className="flex items-center gap-2">
           {passwordRequirements.minLength ? (
             <CheckIcon className="h-4 w-4 text-green-500" />
@@ -27,7 +27,7 @@ export default function RequirementsChecklist({
             className={
               passwordRequirements.minLength
                 ? "text-green-700"
-                : "text-gray-600"
+                : "text-gray-200"
             }
           >
             Minimum 8 characters
@@ -41,7 +41,7 @@ export default function RequirementsChecklist({
           )}
           <span
             className={
-              passwordRequirements.hasDigit ? "text-green-700" : "text-gray-600"
+              passwordRequirements.hasDigit ? "text-green-700" : "text-gray-200"
             }
           >
             At least 1 number
@@ -57,7 +57,7 @@ export default function RequirementsChecklist({
             className={
               passwordRequirements.hasSpecialChar
                 ? "text-green-700"
-                : "text-gray-600"
+                : "text-gray-200"
             }
           >
             At least 1 special character
@@ -73,7 +73,7 @@ export default function RequirementsChecklist({
             className={
               passwordRequirements.hasUppercase
                 ? "text-green-700"
-                : "text-gray-600"
+                : "text-gray-200"
             }
           >
             At least 1 uppercase letter
@@ -89,7 +89,7 @@ export default function RequirementsChecklist({
             className={
               passwordRequirements.hasLowercase
                 ? "text-green-700"
-                : "text-gray-600"
+                : "text-gray-200"
             }
           >
             At least 1 lowercase letter

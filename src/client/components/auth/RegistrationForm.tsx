@@ -91,7 +91,7 @@ export default function RegistrationForm() {
   return (
     <div>
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-2 w-1/3 mx-auto pt-[20%]"
         onSubmit={handleSubmit(onSubmit, onError)}
       >
         <FormInputField
@@ -110,14 +110,12 @@ export default function RegistrationForm() {
           {...register("password")}
         />
 
+        <RequirementsChecklist passwordRequirements={passwordRequirements} />
         <SelectDropdown
           options={["worker", "manager", "company"]}
           label="Role"
           {...register("role")}
         />
-
-        <RequirementsChecklist passwordRequirements={passwordRequirements} />
-
         <FormButton
           buttonStatus={registrationStatus}
           type="submit"

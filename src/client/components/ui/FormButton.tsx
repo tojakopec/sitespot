@@ -16,8 +16,8 @@ const buttonText = {
 };
 
 const buttonColors = {
-  idle: "bg-amber-600",
-  loading: "bg-amber-600",
+  idle: "bg-amber-500",
+  loading: "bg-amber-500",
   success: "bg-green-600",
   error: "bg-red-600",
 };
