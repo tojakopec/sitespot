@@ -5,10 +5,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginInput } from "@/shared/schemas/users";
 import axios from "axios";
+import { useAuth } from "@client/hooks/useAuthStore";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function LoginForm() {
+  const login = useAuth((state) => state.login);
   const [loginStatus, setLoginStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -49,6 +51,8 @@ export default function LoginForm() {
       );
       if (loginResponse.status === 200) {
         setLoginStatus("success");
+        console.log(loginResponse);
+        login(loginResponse.data.userWithoutPassword, loginResponse.data.token);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -56,7 +60,7 @@ export default function LoginForm() {
           setLoginStatus("error");
         }
       }
-      console.error(error);
+      console.error("Login form line 63", error);
     }
   };
 

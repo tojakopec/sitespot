@@ -116,6 +116,14 @@ export default function RegistrationForm() {
           label="Role"
           {...register("role")}
         />
+        <FormInputField
+          title="First Name"
+          type="text"
+          required
+          error={errors.firstName?.message}
+          {...register("firstName")}
+        />
+
         <FormButton
           buttonStatus={registrationStatus}
           type="submit"

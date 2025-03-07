@@ -5,9 +5,37 @@ import { eq } from "drizzle-orm";
 import { verifyPassword } from "../utils/passwordHash";
 import { loginLimiter } from "../middleware/rateLimiter";
 import { sessionConfig } from "../config/session";
+import jwt from "jsonwebtoken";
+import { AuthPayload } from "@server/types/jwtPayload";
 
 const router = express.Router();
+const SECRET_KEY = process.env.JWT_SECRET_KEY!;
 
+const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  let token = undefined;
+  if (req.headers.authorization) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+
+  if (!token) {
+    res.status(401).json({ message: "Unauthorized (no JWT found)" });
+    return;
+  }
+
+  jwt.verify(token, SECRET_KEY, (err, payload) => {
+    const user = payload as AuthPayload;
+    if (err) {
+      res.status(403).json({ message: "Invalid token!" });
+      return;
+    }
+    req.user = user;
+    next();
+  });
+};
 // LOGIN
 router.post(
   "/login",
@@ -37,6 +65,9 @@ router.post(
 
       req.session.userId = user.id;
       req.session.userRole = user.role;
+      const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
+        expiresIn: "24h",
+      });
 
       if (rememberMe) {
         req.session.cookie.maxAge = sessionConfig.extendedDuration;
@@ -44,8 +75,7 @@ router.post(
 
       const { passwordHash, ...userWithoutPassword } = user;
       void passwordHash;
-
-      res.json(userWithoutPassword);
+      res.json({ userWithoutPassword, token });
     } catch (error) {
       next(error);
     }
@@ -88,5 +118,10 @@ router.get(
     }
   }
 );
+
+// VALIDATE JWT
+router.get("/validate", authenticateToken, (req: Request, res: Response) => {
+  res.json({ valid: true, userId: req.session.userId });
+});
 
 export default router;

@@ -27,6 +27,9 @@ export const users = pgTable("users", {
   avatarUrl: text("avatar_url"),
 });
 
+export type User = typeof users.$inferSelect;
+export type SafeUser = Omit<User, "passwordHash">;
+
 export const workerProfiles = pgTable("worker_profiles", {
   id: serial("id").primaryKey(),
   userId: integer("user_id")
