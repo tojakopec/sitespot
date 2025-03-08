@@ -6,11 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginInput } from "@/shared/schemas/users";
 import axios from "axios";
 import { useAuth } from "@client/hooks/useAuthStore";
+import { Navigate } from "react-router";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function LoginForm() {
   const login = useAuth((state) => state.login);
+  const user = useAuth((state) => state.user);
   const [loginStatus, setLoginStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -64,6 +66,10 @@ export default function LoginForm() {
     }
   };
 
+  if (user) {
+    return <Navigate to="/" replace />
+  }
+  
   return (
     <form
       className="flex flex-col gap-2 w-1/3 mx-auto pt-[20%]"

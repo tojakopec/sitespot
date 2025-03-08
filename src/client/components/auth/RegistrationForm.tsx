@@ -8,12 +8,15 @@ import { useEffect, useState } from "react";
 import RequirementsChecklist from "../ui/RequirementsChecklist";
 import axios from "axios";
 import SelectDropdown from "../ui/SelectDropdown";
+import { useAuth } from "@client/hooks/useAuthStore";
+import { Navigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 type FormData = z.infer<typeof createUserSchema>;
 
 export default function RegistrationForm() {
+  const user = useAuth((state) => state.user);
   const {
     register,
     handleSubmit,
@@ -31,6 +34,7 @@ export default function RegistrationForm() {
   const [registrationStatus, setRegistrationStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
+  const [secondStage, setSecondStage] = useState(false);
   const password = watch("password");
   const [passwordRequirements, setPasswordRequirements] = useState({
     minLength: false,
@@ -66,6 +70,7 @@ export default function RegistrationForm() {
 
       if (response.status === 201) {
         setRegistrationStatus("success");
+        setSecondStage(true);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -87,6 +92,10 @@ export default function RegistrationForm() {
   const onError = (errors: FieldErrors<FormData>) => {
     console.error("Form validation errors:", errors);
   };
+
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div>
@@ -116,14 +125,6 @@ export default function RegistrationForm() {
           label="Role"
           {...register("role")}
         />
-        <FormInputField
-          title="First Name"
-          type="text"
-          required
-          error={errors.firstName?.message}
-          {...register("firstName")}
-        />
-
         <FormButton
           buttonStatus={registrationStatus}
           type="submit"
@@ -131,6 +132,7 @@ export default function RegistrationForm() {
         >
           {registrationStatus === "success" ? "Success" : "Register"}
         </FormButton>
+        {secondStage ? <Navigate to="/complete-registration" /> : null}
       </form>
     </div>
   );
