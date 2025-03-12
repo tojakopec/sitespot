@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { db } from "../../db";
 import { eq } from "drizzle-orm";
-import { users, workerProfiles } from "../../db/schema";
+import { workerProfiles } from "../../db/schema";
 import { checkUserExists } from "../../utils/userExists";
 import { checkWorkerExists } from "../../utils/workerExists";
 
@@ -66,13 +66,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
         })
         .returning();
 
-      const [updatedUser] = await tx
-        .update(users)
-        .set({ role: "worker", updatedAt: new Date() })
-        .where(eq(users.id, userId))
-        .returning();
-
-      return { worker: newWorker, user: updatedUser };
+      return { worker: newWorker };
     });
 
     res.status(201).json(result);
@@ -122,13 +116,6 @@ router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
 
     if (!(await checkUserExists(userId))) {
       res.status(404).json({ error: "User not found." });
-      return;
-    }
-
-    if (!(await checkWorkerExists(userId))) {
-      res.status(404).json({
-        error: `User with userId=${userId} is not registered as worker.`,
-      });
       return;
     }
 

@@ -4,6 +4,10 @@ import { eq } from "drizzle-orm";
 import { managerProfiles, users } from "../../db/schema";
 import { checkUserExists } from "../../utils/userExists";
 import { checkCompanyExists } from "../../utils/companyExists";
+import { requireAuth } from "../../middleware/requireAuth";
+import { idParamSchema } from "../../validation/idParam";
+import { updateManagerSchema } from "../../../shared/schemas/users";
+import { validateRequest } from "../../middleware/validateRequest";
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
@@ -27,9 +31,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     const { userId, companyId, workSiteId, position, permissions } = req.body;
 
     if (!(userId && companyId)) {
-      res
-        .status(400)
-        .json({ error: "Required params: userId and companyName." });
+      res.status(400).json({ error: "Required params: userId and companyId." });
       return;
     }
 
@@ -88,28 +90,40 @@ router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const userId = Number(req.params.id);
-    const { companyId, workSiteId, position, permissions } = req.body;
+router.put(
+  "/:id",
+  requireAuth,
+  validateRequest({
+    body: updateManagerSchema,
+    params: idParamSchema.shape.params,
+  }),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = Number(req.params.id);
+      const { companyId, workSiteId, position, permissions } = req.body;
 
-    const [updatedManager] = await db
-      .update(managerProfiles)
-      .set({
-        companyId,
-        workSiteId,
-        position,
-        permissions,
-      })
-      .where(eq(managerProfiles.userId, userId))
-      .returning();
+      const [updatedManager] = await db
+        .update(managerProfiles)
+        .set({
+          companyId,
+          workSiteId,
+          position,
+          permissions,
+        })
+        .where(eq(managerProfiles.userId, userId))
+        .returning();
 
-    if (!updatedManager) {
-      res.status(404).json({ error: "Manager not found." });
+      if (!updatedManager) {
+        res.status(404).json({ error: "Manager not found." });
+        return;
+      }
+
+      res.status(200).json(updatedManager);
+      return;
+    } catch (error) {
+      next(error);
     }
-  } catch (error) {
-    next(error);
   }
-});
+);
 
 export default router;

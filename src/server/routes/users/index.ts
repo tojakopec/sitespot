@@ -115,7 +115,7 @@ router.post(
 // PUT user by id (update user)
 router.put(
   "/:id",
-  // TODO: Add requireOwner(?) so user can only be updated by that user
+  requireAuth,
   validateRequest({
     body: updateUserSchema,
     params: idParamSchema.shape.params,
@@ -134,6 +134,7 @@ router.put(
           avatarUrl,
           email,
           updatedAt: new Date(),
+          profileComplete: true,
         })
         .where(eq(users.id, userId))
         .returning();

@@ -44,7 +44,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { userId, companyName, registrationNumber, description, websiteUrl } =
       req.body;
-
+    console.log(`body: ${JSON.stringify(req.body)}`);
     if (!userId || !companyName) {
       res
         .status(400)
@@ -85,7 +85,9 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     });
 
     res.status(201).json(result);
+    return;
   } catch (error) {
+    console.error("Better error: ", error);
     next(error);
   }
 });
