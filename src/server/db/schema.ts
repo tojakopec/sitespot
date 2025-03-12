@@ -25,6 +25,7 @@ export const users = pgTable("users", {
   lastLogin: timestamp("last_login"),
   isActive: boolean("is_active").default(false),
   avatarUrl: text("avatar_url"),
+  profileComplete: boolean("profile_complete").default(false),
 });
 
 export type User = typeof users.$inferSelect;
@@ -37,8 +38,8 @@ export const workerProfiles = pgTable("worker_profiles", {
     .notNull(),
   skills: json("skills"),
   experience: integer("experience_years"),
-  availability: varchar("availability", { length: 20 }), // 'full-time', 'part-time', 'contract'
-  preferredLocation: json("preferred_location"),
+  availability: json("availability"),
+  preferredLocation: text("preferred_location"),
   ratePerHour: decimal("rate_per_hour", { precision: 10, scale: 2 }),
   bio: text("bio"),
   certifications: json("certifications"),
