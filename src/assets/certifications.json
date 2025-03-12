@@ -1,0 +1,103 @@
+{
+  "General Construction Certifications": {
+    "color": "#0f766e",
+    "items": [
+      "OSHA 10-Hour Construction Safety",
+      "OSHA 30-Hour Construction Safety",
+      "First Aid & CPR",
+      "NFPA 70E Electrical Safety",
+      "Confined Space Entry Training",
+      "Fall Protection Training",
+      "Other"
+    ]
+  },
+  "Carpentry Certifications": {
+    "color": "#854d0e",
+    "items": [
+      "Certified Lead Carpenter (CLC)",
+      "National Wood Flooring Association (NWFA) Certification",
+      "Scaffolding Safety Certification",
+      "Other"
+    ]
+  },
+  "Plumbing Certifications": {
+    "color": "#0369a1",
+    "items": [
+      "Journeyman Plumber License",
+      "Master Plumber License",
+      "Backflow Prevention Certification",
+      "EPA Section 608 Certification (HVAC)",
+      "Other"
+    ]
+  },
+  "Electrical Certifications": {
+    "color": "#facc15",
+    "items": [
+      "Journeyman Electrician License",
+      "Master Electrician License",
+      "National Electrical Code (NEC) Certification",
+      "NFPA 70E Electrical Safety Training",
+      "Solar Photovoltaic (PV) Certification",
+      "Other"
+    ]
+  },
+  "Heavy Equipment & Machine Operators": {
+    "color": "#ea580c",
+    "items": [
+      "National Commission for the Certification of Crane Operators (NCCCO)",
+      "Forklift Operator Certification",
+      "Excavator Operator Certification",
+      "Loader Operator Certification",
+      "Other"
+    ]
+  },
+  "Surveying Certifications": {
+    "color": "#0891b2",
+    "items": [
+      "Certified Survey Technician (CST)",
+      "Land Surveyor License",
+      "GIS Professional (GISP) Certification",
+      "Other"
+    ]
+  },
+  "Engineering Certifications": {
+    "color": "#3730a3",
+    "items": [
+      "Professional Engineer (PE) License",
+      "Engineer in Training (EIT) Certification",
+      "LEED Green Associate",
+      "LEED AP (Accredited Professional)",
+      "Other"
+    ]
+  },
+  "Architecture Certifications": {
+    "color": "#be185d",
+    "items": [
+      "Architect Registration Examination (ARE)",
+      "NCARB Certification",
+      "LEED AP for Building Design and Construction (LEED AP BD+C)",
+      "Other"
+    ]
+  },
+  "Safety Certifications": {
+    "color": "#b91c1c",
+    "items": [
+      "OSHA Hazard Communication Standard (HAZCOM)",
+      "HAZWOPER 40-Hour Training",
+      "Fire Watch Certification",
+      "Silica Safety Training",
+      "Personal Protective Equipment (PPE) Training",
+      "Other"
+    ]
+  },
+  "General Labor & Site Safety Certifications": {
+    "color": "#525252",
+    "items": [
+      "Flagger Certification",
+      "Scaffolding Safety Certification",
+      "Work Zone Safety Training",
+      "Ladder Safety Training",
+      "Other"
+    ]
+  }
+}

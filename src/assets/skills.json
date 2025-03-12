@@ -1,0 +1,155 @@
+{
+  "Carpentry": {
+    "color": "#854d0e",
+    "items": [
+      "First fix",
+      "Second fix",
+      "Cabinet making",
+      "Woodworking",
+      "Roof framing",
+      "Door and window installation",
+      "Other"
+    ]
+  },
+  "Plumbing": {
+    "color": "#0369a1",
+    "items": [
+      "Tank installation",
+      "Pressure testing",
+      "Pipe fitting",
+      "Boiler installation",
+      "Drainage systems",
+      "Gas fitting",
+      "Other"
+    ]
+  },
+  "Electrical": {
+    "color": "#facc15",
+    "items": [
+      "Wiring installation",
+      "Circuit testing",
+      "Panel board installation",
+      "Lighting systems",
+      "Fire alarm systems",
+      "Renewable energy systems",
+      "Other"
+    ]
+  },
+  "Drywalling": {
+    "color": "#a3e635",
+    "items": [
+      "Board hanging",
+      "Taping and jointing",
+      "Plastering",
+      "Sanding and finishing",
+      "Soundproofing installation",
+      "Other"
+    ]
+  },
+  "Painting": {
+    "color": "#ec4899",
+    "items": [
+      "Surface preparation",
+      "Spray painting",
+      "Brush and roller application",
+      "Staining and varnishing",
+      "Decorative finishes",
+      "Other"
+    ]
+  },
+  "Groundworks": {
+    "color": "#78350f",
+    "items": [
+      "Excavation",
+      "Drainage systems",
+      "Concrete foundations",
+      "Landscaping",
+      "Paving and roadworks",
+      "Other"
+    ]
+  },
+  "Engineering": {
+    "color": "#3730a3",
+    "items": [
+      "Structural calculations",
+      "Site inspections",
+      "Load testing",
+      "CAD drafting",
+      "Material specifications",
+      "Other"
+    ]
+  },
+  "Surveying": {
+    "color": "#0891b2",
+    "items": [
+      "Land measurement",
+      "Topographical surveys",
+      "Boundary setting",
+      "GPS and total station operation",
+      "Leveling and grading",
+      "Other"
+    ]
+  },
+  "Machine/Plant Operators": {
+    "color": "#ea580c",
+    "items": [
+      "Excavator operation",
+      "Crane operation",
+      "Bulldozer operation",
+      "Forklift operation",
+      "Compactor operation",
+      "Other"
+    ]
+  },
+  "General Operatives": {
+    "color": "#525252",
+    "items": [
+      "Material handling",
+      "Site cleaning",
+      "Scaffolding assembly",
+      "Basic tool usage",
+      "Assisting tradespeople",
+      "Other"
+    ]
+  },
+  "Steel Fixing": {
+    "color": "#475569",
+    "items": [
+      "Rebar cutting and bending",
+      "Rebar tying",
+      "Mesh reinforcement installation",
+      "Structural steel erection",
+      "Other"
+    ]
+  },
+  "Roofing": {
+    "color": "#b91c1c",
+    "items": [
+      "Shingle installation",
+      "Flat roofing systems",
+      "Flashing and waterproofing",
+      "Gutter and drainage installation",
+      "Other"
+    ]
+  },
+  "Tiling": {
+    "color": "#7e22ce",
+    "items": [
+      "Wall and floor tiling",
+      "Grouting and sealing",
+      "Pattern layout",
+      "Tile cutting",
+      "Other"
+    ]
+  },
+  "Masonry": {
+    "color": "#65a30d",
+    "items": [
+      "Bricklaying",
+      "Blockwork",
+      "Stonework",
+      "Pointing and repointing",
+      "Other"
+    ]
+  }
+}
