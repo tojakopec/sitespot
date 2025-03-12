@@ -31,10 +31,7 @@ const SelectDropdown = forwardRef<HTMLSelectElement, SelectDropdownProps>(
   ) => {
     return (
       <div className={`flex flex-col gap-2 mb-4 ${className}`}>
-        <label
-          htmlFor={name}
-          className="block text-2xl font-medium text-gray-700"
-        >
+        <label htmlFor={name} className="block text-2xl font-medium text-white">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
         <select

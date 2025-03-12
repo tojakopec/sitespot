@@ -6,6 +6,7 @@ interface FormInputFieldProps {
   type: string;
   error?: string;
   required?: boolean;
+  placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   value?: string;
@@ -20,6 +21,7 @@ const FormInputField = forwardRef<HTMLInputElement, FormInputFieldProps>(
       type,
       error,
       required = false,
+      placeholder,
       onChange,
       onBlur,
       value,
@@ -28,12 +30,13 @@ const FormInputField = forwardRef<HTMLInputElement, FormInputFieldProps>(
     ref
   ) => {
     return (
-      <div className="flex flex-col gap-2 mb-4">
+      <div className="flex flex-col mb-2">
         <label
           htmlFor={name}
-          className="block text-2xl font-medium text-gray-200"
+          className="text-lg text-left font-medium text-gray-200"
         >
-          {title} {required && <span className="text-red-500">*</span>}
+          {title}
+          {required && <span className="text-red-500 ml-1">*</span>}
         </label>
         <input
           ref={ref}
@@ -44,12 +47,24 @@ const FormInputField = forwardRef<HTMLInputElement, FormInputFieldProps>(
           onBlur={onBlur}
           value={value}
           required={required}
-          className={`mt-1 block w-full rounded-md border px-3  shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg ${
-            error ? "border-red-500" : "border-gray-300"
-          } ${type === "checkbox" ? "w-4 h-4" : ""}`}
+          placeholder={placeholder}
+          className={`
+            mt-1 block w-full rounded-md border px-3 py-2 text-gray-200
+            bg-transparent border-gray-600
+            shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500
+            sm:text-lg transition-colors
+            ${
+              error
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : ""
+            }
+            ${type === "checkbox" ? "w-4 h-4" : ""}
+          `}
           {...rest}
         />
-        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-sm mt-1 font-medium">{error}</p>
+        )}
       </div>
     );
   }

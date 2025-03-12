@@ -53,7 +53,6 @@ export default function LoginForm() {
       );
       if (loginResponse.status === 200) {
         setLoginStatus("success");
-        console.log(loginResponse);
         login(loginResponse.data.userWithoutPassword, loginResponse.data.token);
       }
     } catch (error) {
@@ -67,9 +66,9 @@ export default function LoginForm() {
   };
 
   if (user) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
-  
+
   return (
     <form
       className="flex flex-col gap-2 w-1/3 mx-auto pt-[20%]"

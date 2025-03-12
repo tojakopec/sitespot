@@ -1,22 +1,23 @@
 import FormButton from "../ui/FormButton";
 import FormInputField from "../ui/FormInputField";
 import { useForm, FieldErrors } from "react-hook-form";
-import { createUserSchema } from "@/shared/schemas/users";
+import { createUserSchema, CreateUserInput } from "@/shared/schemas/users";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useEffect, useState } from "react";
 import RequirementsChecklist from "../ui/RequirementsChecklist";
 import axios from "axios";
 import SelectDropdown from "../ui/SelectDropdown";
 import { useAuth } from "@client/hooks/useAuthStore";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { getCsrfToken } from "@/client/utils/getCsrfToken";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-type FormData = z.infer<typeof createUserSchema>;
+type FormData = CreateUserInput;
 
 export default function RegistrationForm() {
   const user = useAuth((state) => state.user);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -34,7 +35,6 @@ export default function RegistrationForm() {
   const [registrationStatus, setRegistrationStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
-  const [secondStage, setSecondStage] = useState(false);
   const password = watch("password");
   const [passwordRequirements, setPasswordRequirements] = useState({
     minLength: false,
@@ -56,21 +56,20 @@ export default function RegistrationForm() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const csrfResponse = await axios.get(`${API_URL}/csrf-token`, {
-        withCredentials: true,
-      });
+      const { csrfToken } = await getCsrfToken();
 
-      // Register user
       const response = await axios.post(`${API_URL}/users`, data, {
         headers: {
-          "X-CSRF-Token": csrfResponse.data.csrfToken,
+          "X-CSRF-Token": csrfToken,
         },
         withCredentials: true,
       });
 
       if (response.status === 201) {
         setRegistrationStatus("success");
-        setSecondStage(true);
+        setTimeout(() => {
+          navigate("/auth/login");
+        }, 1000);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -98,42 +97,49 @@ export default function RegistrationForm() {
   }
 
   return (
-    <div>
-      <form
-        className="flex flex-col gap-2 w-1/3 mx-auto pt-[20%]"
-        onSubmit={handleSubmit(onSubmit, onError)}
-      >
-        <FormInputField
-          title="E-mail"
-          type="email"
-          required
-          error={errors.email?.message}
-          {...register("email")}
-        />
-
-        <FormInputField
-          title="Password"
-          type="password"
-          required
-          error={errors.password?.message}
-          {...register("password")}
-        />
-
-        <RequirementsChecklist passwordRequirements={passwordRequirements} />
-        <SelectDropdown
-          options={["worker", "manager", "company"]}
-          label="Role"
-          {...register("role")}
-        />
-        <FormButton
-          buttonStatus={registrationStatus}
-          type="submit"
-          disabled={registrationStatus === "success"}
+    <div className="flex flex-col justify-center h-full">
+      {registrationStatus !== "success" && (
+        <form
+          className="flex flex-col gap-2  mx-auto backdrop-blur-2xl rounded-lg px-8 py-4"
+          onSubmit={handleSubmit(onSubmit, onError)}
         >
-          {registrationStatus === "success" ? "Success" : "Register"}
-        </FormButton>
-        {secondStage ? <Navigate to="/complete-registration" /> : null}
-      </form>
+          <FormInputField
+            title="E-mail"
+            type="email"
+            required
+            error={errors.email?.message}
+            {...register("email")}
+          />
+
+          <FormInputField
+            title="Password"
+            type="password"
+            required
+            error={errors.password?.message}
+            {...register("password")}
+          />
+
+          <RequirementsChecklist passwordRequirements={passwordRequirements} />
+          <SelectDropdown
+            options={["worker", "manager", "company"]}
+            label="I'm registering as a"
+            {...register("role")}
+          />
+          <FormButton
+            buttonStatus={registrationStatus}
+            type="submit"
+            disabled={registrationStatus === "loading"}
+          >
+            Register
+          </FormButton>
+        </form>
+      )}
+      {registrationStatus === "success" && (
+        <div className="flex flex-col gap-2 mx-auto backdrop-blur-2xl rounded-lg px-8 py-4">
+          <h1 className="text-2xl font-bold">Registration successful</h1>
+          <p className="text-sm">Redirecting to login page...</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,12 +1,9 @@
-import { AuthState } from "@client/hooks/useAuthStore";
+import { useAuth } from "@client/hooks/useAuthStore";
 import AdminDashboard from "./AdminDashboard";
 import WorkerDashboard from "./WorkerDashboard";
 import ManagerDashboard from "./ManagerDashboard";
 import CompanyDashboard from "./CompanyDashboard";
-
-interface DashboardProps {
-  user: AuthState["user"];
-}
+import CompleteRegistration from "../components/auth/CompleteRegistration";
 
 const ROLE_DASHBOARD = {
   ["admin"]: <AdminDashboard />,
@@ -15,10 +12,15 @@ const ROLE_DASHBOARD = {
   ["company"]: <CompanyDashboard />,
 };
 
-export default function Dashboard({ user }: DashboardProps) {
+export default function Dashboard() {
+  const user = useAuth((state) => state.user);
   if (!user) {
     return;
   }
   const role = user.role;
+
+  if (!user.profileComplete) {
+    return <CompleteRegistration />;
+  }
   return ROLE_DASHBOARD[role as keyof object];
 }
